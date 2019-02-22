@@ -1,0 +1,14 @@
+.signUpForm {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2em;
+}
+.dialogTitle {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}

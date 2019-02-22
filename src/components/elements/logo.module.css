@@ -1,0 +1,10 @@
+.logoContainer {
+    display: flex !important;
+    align-items: center;
+    color: #fff !important;
+}
+.icon {
+    margin-right: 15px;
+    width: 30px !important;
+    height: 30px !important;
+}

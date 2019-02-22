@@ -1,0 +1,30 @@
+.fieldset {
+    border-color: rgba(0, 0, 0, 0.23);
+    border-width: 1px;
+    border-radius: 4px;
+    display: flex;
+    flex-wrap: wrap;
+}
+.legend {
+    font-size: 0.85rem;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    color: rgba(0, 0, 0, 0.87);
+
+
+}
+.form {
+    display: flex;
+    margin: 10px 0;
+    max-width: 200px;
+}
+.button {
+    margin-top: 10px !important;
+}
+.buttons {
+    display: flex;
+    justify-content: space-between;
+}
+.error {
+    margin-top: 10px !important;
+    margin-bottom: 10px !important;
+}

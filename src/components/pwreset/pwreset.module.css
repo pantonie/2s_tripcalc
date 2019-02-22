@@ -1,0 +1,11 @@
+.resetForm {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+    margin: 20px;
+}
+.buttonsContainer{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}

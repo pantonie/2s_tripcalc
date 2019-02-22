@@ -1,0 +1,17 @@
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    margin: 15px;
+    padding: 15px;
+    text-align: center;
+}
+.loginForm button {
+    margin: 15px 0;
+}
+.divider {
+    margin: 15px 0 !important;
+}
+.container {
+    max-width: 400px;
+
+}
