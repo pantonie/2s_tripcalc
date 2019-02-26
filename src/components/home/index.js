@@ -21,6 +21,7 @@ import countAdditionalDaysAbroad from '../utils/countAdditionalDaysAbroad'
 import SimpleTable from '../elements/table';
 import Calendar from '../calandar';
 import Trip from '../elements/trip';
+import countDaysAbroad from '../utils/countDaysAbroad';
 
 
 const GridAlignSelfCenter = withStyles({
@@ -65,7 +66,6 @@ class HomePage extends React.Component {
         this.handleTripAction = this.handleTripAction.bind(this);
         this.closeTripForm = this.closeTripForm.bind(this);
         this.validateTrip = this.validateTrip.bind(this);
-        this.countDaysAbroad = this.countDaysAbroad.bind(this);
         this.handleRemoveAgree = this.handleRemoveAgree.bind(this);
         this.handleRemoveDisagree = this.handleRemoveDisagree.bind(this);
         this.countAhead = this.countAhead.bind(this);
@@ -78,38 +78,6 @@ class HomePage extends React.Component {
         this.ref.on('value', snapshot => {
             this.setState({ data: snapshot.val() })
         })
-    }
-
-    countDaysAbroad(inputDate) {
-        let today = '';
-        inputDate ? today = moment(inputDate) : today = moment(new Date()).startOf('day');
-        const edgeDate = moment(today).subtract(179, 'days');
-        if (inputDate) {
-            this.setState({ countAheadEdgeDate: edgeDate.format('DD MMM YYYY') })
-        }
-        const { trips } = this.state.data;
-        if (!trips) {
-            return null
-        }
-
-        let daysAbroad = 0;
-        for (let trip in trips) {
-            if (moment(trips[trip].startdate).isBetween(edgeDate, today, null, '[]') && moment(trips[trip].enddate).isBetween(edgeDate, today, null, '[]')) {
-                daysAbroad += Number.parseInt(trips[trip].duration);
-            }
-            if (moment(trips[trip].startdate).isBefore(edgeDate) && moment(trips[trip].enddate).isSameOrAfter(edgeDate)) {
-                daysAbroad += Number.parseInt(moment(trips[trip].enddate).diff(edgeDate, 'days') + 1);
-                if (inputDate) {
-                    this.setState({
-                        countAheadCross: moment(trips[trip].startdate).format('DD-MM-YYYY').toString() + ' - ' + moment(trips[trip].enddate).format('DD-MM-YYYY').toString(),
-                    })
-                }
-            }
-            if (moment(trips[trip].startdate).isSameOrBefore(today) && moment(trips[trip].enddate).isAfter(today)) {
-                daysAbroad += Number.parseInt(moment(today).diff(trips[trip].startdate, 'days') + 1);
-            }
-        }
-        return daysAbroad;
     }
 
     //reaction to button click on add/edit trip form
@@ -153,7 +121,8 @@ class HomePage extends React.Component {
                 }
             }
         }
-        let daysAbroad = this.countDaysAbroad(this.state.tripData.endDate);
+        let daysAbroad = countDaysAbroad(this.state.data.trips, this.state.tripData.endDate);
+        this.setState({ countAheadEdgeDate: moment(this.state.tripData.endDate).subtract(179, 'days').format('DD MMM YYYY') })
         daysAbroad += Number.parseInt(moment(this.state.tripData.endDate).diff(this.state.tripData.startDate, 'days') + 1);
         if (this.state.tripState === 'edit') {
             daysAbroad -= Number.parseInt(moment(this.state.data.trips[this.state.tripActionUid].enddate).diff(this.state.data.trips[this.state.tripActionUid].startdate, 'days') + 1);
@@ -171,7 +140,8 @@ class HomePage extends React.Component {
 
     countAhead() {
         if (this.state.countAheadDate) {
-            const days = this.countDaysAbroad(this.state.countAheadDate);
+            const days = countDaysAbroad(this.state.data.trips, this.state.countAheadDate);
+            this.setState({ countAheadEdgeDate: moment(this.state.countAheadDate).subtract(179, 'days').format('DD MMM YYYY') })
             const additionalDays = countAdditionalDaysAbroad(90 - days, this.state.countAheadDate, this.state.data.trips);
             this.setState({ countAhead: days, countAheadAdditionalDays: additionalDays });
         }
@@ -222,7 +192,7 @@ class HomePage extends React.Component {
     }
 
     render() {
-        const daysAbroad = this.countDaysAbroad();
+        const daysAbroad = countDaysAbroad(this.state.data.trips);
         const additionalDays = countAdditionalDaysAbroad(90 - daysAbroad, moment(new Date()).startOf('day'), this.state.data.trips);
         return (
             <div>

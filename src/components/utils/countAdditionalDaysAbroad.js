@@ -1,4 +1,11 @@
 import moment from 'moment';
+/**
+ * This returns additional days that could be added to days left
+ * @param {number} days - number of days left from 90 days period
+ * @param {string} date - end of 180 days period, could be future date
+ * @param {object} trips - object with trips records
+ * @returns {number} daysLeft - number of days which can be added to left days
+ * **/
 
 const countAdditionalDaysAbroad = (days, date, trips) => {
     const today = moment(date);

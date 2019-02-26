@@ -1,4 +1,4 @@
-This is Schengen calculator. It counts number of days spen in Schengen zone within 180 days period. It's possible to count trip duration for any date taking into account previous trips.<br>
+This is Schengen calculator. It counts number of days spent in Schengen zone within 180 days period. It's possible to count trip duration for any date taking into account previous trips.<br>
 App is made as PWA so it's possible to install it on Androis and iOS. To do that:
 - On Android. Open published app in chrome and in settings select "Add to main screen"
 - On iOS. Open published app in safari. In share section select "Add to Home screen"
