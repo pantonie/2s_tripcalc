@@ -1,6 +1,7 @@
 import app from 'firebase/app';
 import 'firebase/auth';
 import  'firebase/database';
+import shortid from "shortid";
 
 const config = {
     apiKey: process.env.REACT_APP_API_KEY,
@@ -50,8 +51,9 @@ class Firebase {
             } else {
                 fallback();
             }
-        })
-
+        });
+    addTrip = (uid, data) => this.user(uid).child(`trips/${ shortid.generate() }`).set(data);
+    editTrip = (uid, tripId, data) =>  this.user(uid).child(`trips/${ tripId }`).set(data);
 }
 
 export default Firebase;
