@@ -2,7 +2,6 @@ import React from 'react';
 import { withAuthorization, withEmailVerification } from '../session';
 import { withFirebase } from '../firebase';
 import { compose } from 'recompose';
-import shortid from 'shortid';
 import moment from 'moment';
 import TextField from '@material-ui/core/TextField';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
@@ -88,7 +87,7 @@ class HomePage extends React.Component {
         let validate = this.validateTrip();
         validate && (error = validate);
         if (!error && this.state.tripState === 'add') {
-            this.ref.child(`trips/${ shortid.generate() }`).set({
+            this.props.firebase.addTrip(this.state.uid, {
                 startdate: this.state.tripData.startDate,
                 enddate: this.state.tripData.endDate,
                 duration: moment(this.state.tripData.endDate).diff(this.state.tripData.startDate, 'days') + 1,
@@ -97,7 +96,7 @@ class HomePage extends React.Component {
             this.closeTripForm();
         }
         if (!error && this.state.tripState === 'edit') {
-            this.ref.child(`trips/${ this.state.tripActionUid }`).set({
+            this.props.firebase.editTrip(this.state.uid, this.state.tripActionUid, {
                 startdate: this.state.tripData.startDate,
                 enddate: this.state.tripData.endDate,
                 duration: moment(this.state.tripData.endDate).diff(this.state.tripData.startDate, 'days') + 1,
@@ -122,7 +121,7 @@ class HomePage extends React.Component {
             }
         }
         let daysAbroad = countDaysAbroad(this.state.data.trips, this.state.tripData.endDate);
-        this.setState({ countAheadEdgeDate: moment(this.state.tripData.endDate).subtract(179, 'days').format('DD MMM YYYY') })
+        this.setState({ countAheadEdgeDate: moment(this.state.tripData.endDate).subtract(179, 'days').format('DD MMM YYYY') });
         daysAbroad += Number.parseInt(moment(this.state.tripData.endDate).diff(this.state.tripData.startDate, 'days') + 1);
         if (this.state.tripState === 'edit') {
             daysAbroad -= Number.parseInt(moment(this.state.data.trips[this.state.tripActionUid].enddate).diff(this.state.data.trips[this.state.tripActionUid].startdate, 'days') + 1);
@@ -141,7 +140,7 @@ class HomePage extends React.Component {
     countAhead() {
         if (this.state.countAheadDate) {
             const days = countDaysAbroad(this.state.data.trips, this.state.countAheadDate);
-            this.setState({ countAheadEdgeDate: moment(this.state.countAheadDate).subtract(179, 'days').format('DD MMM YYYY') })
+            this.setState({ countAheadEdgeDate: moment(this.state.countAheadDate).subtract(179, 'days').format('DD MMM YYYY') });
             const additionalDays = countAdditionalDaysAbroad(90 - days, this.state.countAheadDate, this.state.data.trips);
             this.setState({ countAhead: days, countAheadAdditionalDays: additionalDays });
         }
